@@ -1,6 +1,10 @@
+
+
+
 import time
 from idlelib.mainmenu import menudefs
-
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
 from Initision import Init
@@ -180,12 +184,30 @@ class Dang_Nhap(Init):
         Hien_thi= self.driver.find_element(By.CSS_SELECTOR,"body > div > header > div.d-flex.align-items-center.gap-3 > div")
         print("Hiển thị ra: " + Hien_thi.text)
 
+
     def test_17_TC17(self):
         self.mo_web()
         self.Dang_nhap()
 
-        menu=Menu(self.driver)
-        menu.Dang_Ki_Kich_Ban()
+        menu = Menu(self.driver)
+        menu.Doan_Phim()
+
+    # Click vào nút Chi tiết đầu tiên và chờ nó clickable
+        chi_tiet_btn = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, "//tbody/tr[1]//a[contains(@class, 'btn-outline-primary')]"))
+    )
+        chi_tiet_btn.click()
+
+    # Chờ trang chi tiết load xong và hiển thị tiêu đề phim
+        hien_thi = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, "#projectProfileTitle"))
+    )
+
+        print("Hiển thị ra: " + hien_thi.text)
+
+        time.sleep(5)
+
+
 
 
 
