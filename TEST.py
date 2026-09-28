@@ -205,7 +205,7 @@ class Dang_Nhap(Init):
 
         print("Hiển thị ra: " + hien_thi.text)
 
-        time.sleep(5)
+        time.sleep(4)
 
 
 
