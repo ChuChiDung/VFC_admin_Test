@@ -147,3 +147,10 @@ class Menu:
         )
         self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
         self.driver.execute_script("arguments[0].click();", element)
+
+    def NSu_Them_Nhan_Su(self):
+        element = WebDriverWait(self.driver,10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR,"button[data-bs-target='#addPersonnelModal']"))
+        )
+        self.driver.execute_script("arguments[0].scrollIntoView(true);",element)
+        self.driver.execute_script("arguments[0].click();",element)
