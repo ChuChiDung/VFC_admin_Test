@@ -194,20 +194,26 @@ class Dang_Nhap(Init):
         menu = Menu(self.driver)
         menu.Doan_Phim()
 
-    # Click vào nút Chi tiết đầu tiên và chờ nó clickable
-        chi_tiet_btn = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, "//tbody/tr[1]//a[contains(@class, 'btn-outline-primary')]"))
-    )
-        chi_tiet_btn.click()
+    # Kiểm tra xem có dòng "Chưa có phim nào trong hệ thống" hay không
+    # Hoặc kiểm tra xem danh sách có nút Chi tiết (//tbody/tr[1]//a[contains(@class, 'btn-outline-primary')]) hay không
+        elements = self.driver.find_elements(By.XPATH, "//tbody/tr[1]//a[contains(@class, 'btn-outline-primary')]")
+
+        if len(elements) > 0:
+        #TRƯỜNG HỢP 1: Có phim trong danh sách (Tồn tại nút Chi tiết)
+            chi_tiet_btn = elements[0]
+            chi_tiet_btn.click()
 
     # Chờ trang chi tiết load xong và hiển thị tiêu đề phim
-        hien_thi = WebDriverWait(self.driver, 10).until(
+            hien_thi = WebDriverWait(self.driver, 10).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, "#projectProfileTitle"))
-    )
+            )
+            print("Hiển thị ra: " + hien_thi.text)
 
-        print("Hiển thị ra: " + hien_thi.text)
+        else:
+    # TRƯỜNG HỢP 2: Danh sách trống (Không có phim nào)
+            print("Thông báo: Chưa có phim nào trong hệ thống (Không tìm thấy nút Chi tiết).")
 
-        time.sleep(4)
+            time.sleep(4)
 
     def test_18_TC18(self):
         self.mo_web()
@@ -276,7 +282,7 @@ class Dang_Nhap(Init):
         else:
             print("Không có thông báo lỗi nào xuất hiện (Thêm nhân sự có thể đã thành công).")
 
-
+        time.sleep(3)
 
         # Chờ cho ô tìm kiếm hiển thị rồi nhập tên nhân sự cần tìm
         search_input = WebDriverWait(self.driver, 10).until(
@@ -416,7 +422,7 @@ class Dang_Nhap(Init):
         print("Nội dung popup xác nhận: " + alert.text)
         alert.accept()
 
-        time.sleep(1)
+        time.sleep(3)
 
         #3.Lấy ND thông báo Toast phản hồi hệ thống bằng JS
         toast_text = self.driver.execute_script("""
@@ -430,7 +436,10 @@ class Dang_Nhap(Init):
         else:
             print("Không có thông báo Toast phản hồi từ hệ thống nào cả")
 
-        time.sleep(4)
+        time.sleep(5)
+
+
+
 
 
 
