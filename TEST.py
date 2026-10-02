@@ -412,7 +412,7 @@ class Dang_Nhap(Init):
 
         #1.CLick vào nút xóa dòng đầu
         delete_NS_btn = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, "tbody tr:nth-child(1) form[action*='/delete'] button[type='submit']"))
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "#personnel-160 > td.text-end.pe-4.personnel-actions-cell > div > form > button"))
         )
         delete_NS_btn.click()
 
