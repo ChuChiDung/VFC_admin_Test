@@ -154,3 +154,5 @@ class Menu:
         )
         self.driver.execute_script("arguments[0].scrollIntoView(true);",element)
         self.driver.execute_script("arguments[0].click();",element)
+
+

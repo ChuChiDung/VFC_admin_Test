@@ -411,10 +411,16 @@ class Dang_Nhap(Init):
         search_input.send_keys(Keys.RETURN)
 
         #1.CLick vào nút xóa dòng đầu
-        delete_NS_btn = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, "#personnel-160 > td.text-end.pe-4.personnel-actions-cell > div > form > button"))
-        )
-        delete_NS_btn.click()
+        xoa_btn_xpath = "//tr[contains(., 'Nguyễn Văn Luân')]//button[contains(@class, 'btn-outline-danger')]"
+
+        # Chờ cho nút xóa xuất hiện và có thể click được
+        xoa_btn = WebDriverWait(self.driver, 15).until(
+            EC.element_to_be_clickable((By.XPATH, xoa_btn_xpath))
+            )
+
+        # Cuộn trang đến vị trí nút xóa để đảm bảo Jenkins (headless mode) nhìn thấy và click được
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", xoa_btn)
+        xoa_btn.click()
 
         #2.Chờ hộp thoại xác nhận bấm OK
         WebDriverWait(self.driver, 10).until(EC.alert_is_present())
@@ -438,6 +444,214 @@ class Dang_Nhap(Init):
 
         time.sleep(5)
 
+    def test_21_TC21(self):
+        self.mo_web()
+        self.Dang_nhap()
+        time.sleep(1)
+
+        menu=Menu(self.driver)
+        menu.Loai_Thiet_Bi()
+        time.sleep(1)
+
+        Ten_loai_thiet_bi = WebDriverWait(self.driver,10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR,'#equipmentTypeName'))
+        )
+        Ten_loai_thiet_bi.clear()
+        Ten_loai_thiet_bi.send_keys("Test")
+
+        Tao_Loai_Thiet_bi = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "form[action='/admin/equipment-types'] button[type='submit']"))
+        )
+        Tao_Loai_Thiet_bi.click()
+        time.sleep(2)
+
+        toast_text = self.driver.execute_script("""
+        var toast = document.querySelector('#appToastContainer .app-toast-body');
+        return toast ? toast.innerText.trim() : null;
+        """)
+
+        if toast_text:
+            print("Nội dung thông báo nhận được là: " + toast_text)
+        else:
+            print("Không thấy có thông báo gì!!!.")
+
+        time.sleep(4)
+
+    def test_22_TC22(self):
+        self.mo_web()
+        self.Dang_nhap()
+        time.sleep(1)
+
+        menu=Menu(self.driver)
+        menu.Loai_Thiet_Bi()
+        time.sleep(1)
+
+        Ten_loai_thiet_bi = WebDriverWait(self.driver,10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR,'#equipmentTypeName'))
+        )
+        Ten_loai_thiet_bi.clear()
+        Ten_loai_thiet_bi.send_keys("Test")
+
+        Tao_Loai_Thiet_bi = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "form[action='/admin/equipment-types'] button[type='submit']"))
+        )
+        Tao_Loai_Thiet_bi.click()
+        time.sleep(2)
+
+        toast_text = self.driver.execute_script("""
+        var toast = document.querySelector('#appToastContainer .app-toast-body');
+        return toast ? toast.innerText.trim() : null;
+        """)
+
+        if toast_text:
+            print("Nội dung thông báo nhận được là: " + toast_text)
+        else:
+            print("Không thấy có thông báo gì!!!.")
+
+        time.sleep(4)
+
+    def test_23_TC23(self):
+        self.mo_web()
+        self.Dang_nhap()
+        time.sleep(1)
+
+        menu=Menu(self.driver)
+        menu.Loai_Thiet_Bi()
+        time.sleep(1)
+
+        target_name = "Test"
+        # 1. Tìm và click nút Xóa của dòng có chứa tên loại thiết bị tương ứng
+        delete_btn = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, f"//tr[.//form[contains(@id, 'edit-equipment-type')]//input[@value='{target_name}']]//form[contains(@action, '/delete')]//button[@type='submit']"))
+        )
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", delete_btn)
+        time.sleep(1)
+        delete_btn.click()
+
+# 2. Chờ hộp thoại xác nhận (confirm popup) xuất hiện và bấm OK
+        WebDriverWait(self.driver, 10).until(EC.alert_is_present())
+        alert = self.driver.switch_to.alert
+        print("Nội dung popup xác nhận: " + alert.text)
+        alert.accept()
+
+        time.sleep(1)
+
+# 3. Lấy nội dung thông báo Toast phản hồi từ hệ thống
+        toast_text = self.driver.execute_script("""
+            var toast = document.querySelector('#appToastContainer .app-toast-body');
+            return toast ? toast.innerText.trim() : null;
+        """)
+
+        if toast_text:
+            print("Nội dung thông báo nhận được là: " + toast_text)
+        else:
+            print("Chưa nhận được thông báo nào khi xóa thiết bị!")
+
+        time.sleep(4)
+
+    def test_24_TC24(self):
+        self.mo_web()
+        self.Dang_nhap()
+
+        menu = Menu(self.driver)
+        menu.Chuc_Danh()
+        time.sleep(1)
+
+        Ten_Chuc_Danh = WebDriverWait(self.driver,10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR,"#employeePositionName"))
+        )
+        Ten_Chuc_Danh.clear()
+        Ten_Chuc_Danh.send_keys("Kiểm thử")
+
+        Tao_Chuc_Danh = WebDriverWait(self.driver,10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR,"form[action='/admin/employee-positions'] button[type='submit']"))
+        )
+        Tao_Chuc_Danh.click()
+        time.sleep(1)
+
+        toast_text = self.driver.execute_script("""
+        var toast = document.querySelector('#appToastContainer .app-toast-body');
+        return toast ? toast.innerText.trim() : null;
+        """)
+
+        if toast_text:
+            print("Nội dung thông báo nhận được là: " + toast_text)
+        else:
+            print("Không thấy thông báo nào cả!")
+
+        time.sleep(4)
+
+    def test_25_TC25(self):
+        self.mo_web()
+        self.Dang_nhap()
+
+        menu = Menu(self.driver)
+        menu.Chuc_Danh()
+        time.sleep(1)
+
+        Ten_Chuc_Danh = WebDriverWait(self.driver,10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR,"#employeePositionName"))
+        )
+        Ten_Chuc_Danh.clear()
+        Ten_Chuc_Danh.send_keys("Kiểm thử")
+
+        Tao_Chuc_Danh = WebDriverWait(self.driver,10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR,"form[action='/admin/employee-positions'] button[type='submit']"))
+        )
+        Tao_Chuc_Danh.click()
+        time.sleep(1)
+
+        toast_text = self.driver.execute_script("""
+        var toast = document.querySelector('#appToastContainer .app-toast-body');
+        return toast ? toast.innerText.trim() : null;
+        """)
+
+        if toast_text:
+            print("Nội dung thông báo nhận được là: " + toast_text)
+        else:
+            print("Không thấy thông báo nào cả!")
+
+        time.sleep(4)
+
+    def test_26_TC26(self):
+        self.mo_web()
+        self.Dang_nhap()
+
+        menu=Menu(self.driver)
+        menu.Chuc_Danh()
+        time.sleep(1)
+
+        # Đặt tên chức danh cần xóa vào biến
+        target_name = "Kiểm thử"
+
+        # 1. Định vị nút Xóa của dòng có chứa tên chức danh tương ứng
+        delete_btn = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, f"//tr[.//input[@value='{target_name}']]//form[contains(@action, '/delete')]//button[@type='submit']"))
+        )
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", delete_btn)
+        time.sleep(1)
+        delete_btn.click()
+
+        # 2. Chờ hộp thoại xác nhận (confirm popup) xuất hiện và bấm OK
+        WebDriverWait(self.driver, 10).until(EC.alert_is_present())
+        alert = self.driver.switch_to.alert
+        print("Nội dung popup xác nhận: " + alert.text)
+        alert.accept()
+
+        time.sleep(1)
+
+        # 3. Lấy nội dung thông báo Toast phản hồi từ hệ thống
+        toast_text = self.driver.execute_script("""
+            var toast = document.querySelector('#appToastContainer .app-toast-body');
+            return toast ? toast.innerText.trim() : null;
+        """)
+
+        if toast_text:
+            print("Nội dung thông báo nhận được là: " + toast_text)
+        else:
+            print("Chưa nhận được thông báo nào khi xóa chức danh!")
+
+        time.sleep(4)
 
 
 
