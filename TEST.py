@@ -11,6 +11,7 @@ from selenium.webdriver.common.keys import Keys
 
 from Initision import Init
 from Menu_VFC import Menu
+from User import User
 
 class Dang_Nhap(Init):
     def test_05_TC5(self):
@@ -428,7 +429,7 @@ class Dang_Nhap(Init):
         print("Nội dung popup xác nhận: " + alert.text)
         alert.accept()
 
-        time.sleep(3)
+        time.sleep(2)
 
         #3.Lấy ND thông báo Toast phản hồi hệ thống bằng JS
         toast_text = self.driver.execute_script("""
@@ -652,6 +653,80 @@ class Dang_Nhap(Init):
             print("Chưa nhận được thông báo nào khi xóa chức danh!")
 
         time.sleep(4)
+
+    def test_27_TC27(self):
+        self.mo_web()
+        self.Dang_nhap()
+        time.sleep(2)
+
+        self.driver.find_element(By.CSS_SELECTOR,"#notificationMenuButton").click()
+
+        Xem_Tat_Ca_thongbao = self.driver.find_element(By.CSS_SELECTOR,"body > div > header > div.topbar-actions > div:nth-child(1) > div > div.notification-panel-footer > a")
+        Xem_Tat_Ca_thongbao.click()
+        time.sleep(2)
+
+        Hien_thi= WebDriverWait(self.driver,10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR,"#mainContent > section > div"))
+        )
+        print("Hiển thị ra đang ở trang: "+Hien_thi.text)
+
+        time.sleep(4)
+
+    def test_28_TC28(self):
+        self.mo_web()
+        self.Dang_nhap()
+        time.sleep(2)
+
+        user=User(self.driver)
+
+        user.User_AdminVFC()
+        time.sleep(1)
+        user.Setting_CaNhan()
+        time.sleep(1)
+
+        Phone_input = self.driver.find_element(By.ID,"settingsPhone")
+        Phone_input.clear()
+        Phone_input.send_keys("090000000ABC")
+
+        Save_btn = self.driver.find_element(By.CSS_SELECTOR,"button.btn.btn-primary[type='submit']").click()
+        time.sleep(1)
+
+        toast_text = self.driver.execute_script("""
+        var toast = document.querySelector('#appToastContainer .app-toast-body');
+        return toast ? toast.innerText.trim() : null;
+        """)
+
+        if toast_text:
+            print("Nội dung thông báo nhận được là: " + toast_text)
+        else:
+            print("Không thấy thông báo nào cả!")
+
+        time.sleep(4)
+
+    def test_29_TC29(self):
+        self.mo_web()
+        self.Dang_nhap()
+        time.sleep(2)
+
+        user = User(self.driver)
+        user.User_AdminVFC()
+        user.LOG_OUT()
+
+        toast_text = self.driver.execute_script("""
+        var toast = document.querySelector('#appToastContainer .app-toast-body');
+        return toast ? toast.innerText.trim() : null;
+        """)
+        if toast_text:
+            print("Nội dung thông báo nhận được là: "+ toast_text)
+        else:
+            print("Không thấy thông báo nào cả!")
+
+        time.sleep(2)
+
+
+
+
+
 
 
 

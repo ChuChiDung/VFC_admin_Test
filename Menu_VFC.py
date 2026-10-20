@@ -3,6 +3,7 @@ import unittest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.expected_conditions import element_to_be_selected
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions as EC
@@ -154,5 +155,4 @@ class Menu:
         )
         self.driver.execute_script("arguments[0].scrollIntoView(true);",element)
         self.driver.execute_script("arguments[0].click();",element)
-
 
