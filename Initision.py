@@ -39,6 +39,7 @@ class Init(unittest.TestCase):
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
         options.add_experimental_option('useAutomationExtension', False)
         options.add_argument('--ignore-certificate-errors')
+        options.add_argument("--window-size=1920,1080")
 
 
         # 3. Tạo driver
